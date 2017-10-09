@@ -1,0 +1,22 @@
+-----------------------------------------------------------
+    Lecture 10/9/2017
+-----------------------------------------------------------
+All programs have a main function in C++
+
+Standard template: 
+[c++]
+#include <iostream>
+using namespace std; //allows us to not use the prefix std::
+
+int main() 
+{
+	cout << "How many hours did you work? ";
+}
+[c++]]
+
+
+
+
+
+
+
