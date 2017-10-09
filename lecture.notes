@@ -3,7 +3,6 @@
 -----------------------------------------------------------
 All programs have a main function in C++
 
-Standard template: 
 [c++]
 #include <iostream>
 using namespace std; //allows us to not use the prefix std::
@@ -11,8 +10,35 @@ using namespace std; //allows us to not use the prefix std::
 int main() 
 {
 	cout << "How many hours did you work? ";
-}
-[c++]]
+	//double: 10^-308 to 10^308. 15 or 16 significant digits
+	//int: about -2 billion to 2 billion
+	//iedntifiers: letter...zero or more letters, digits, or underscores
+	double hoursWorked;
+	cin >> hoursWorked;
+	cout << "What is your hourly rate of pay? ";
+	double payRate;
+	cin >> payRate;
+	cout.setf(ios::fixed); //fixed point notation
+	cout.precision(2); //2 digits to the right of the decimal point (rounds if necessary)
+	double amountEarned = hoursWorked * payRate;
+	cout << "You earned $" << amountEarned << endl; //multiplication has higher precidence than <<
+	cout << "$" << (0.10 * amountEarned) << " will be withheld." << endl;
+}	
+[\c++]]
+
+Arithmetic expressions
+*, /, +, -, (), %
+
+Divison
+- 14.3/5.0 ==> 2.86
+- 14.3/5 ==> 2.86
+- 14/5.0 ==> 2.85
+- 14/5 ==> 2
+- 14%5 ==> 4 (precidence is the same as multiplication and divison)
+
+[c++]
+double x = 3.1 + 14/5; //x = 5.1, not 5.9 
+[\c++]]
 
 
 
