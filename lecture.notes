@@ -1,8 +1,13 @@
 -----------------------------------------------------------
-    Lecture 10/9/2017
+    10/9/2017
 -----------------------------------------------------------
 All programs have a main function in C++
 
+
+Types
+	double:  10^-308 to 10^308. 15 or 16 significant digits
+	int: about -2 billion to 2 billion
+	identifiers: letter...zero or more letters, digits, or underscores
 [c++]
 #include <iostream>
 using namespace std; //allows us to not use the prefix std::
@@ -10,9 +15,6 @@ using namespace std; //allows us to not use the prefix std::
 int main() 
 {
 	cout << "How many hours did you work? ";
-	//double: 10^-308 to 10^308. 15 or 16 significant digits
-	//int: about -2 billion to 2 billion
-	//iedntifiers: letter...zero or more letters, digits, or underscores
 	double hoursWorked;
 	cin >> hoursWorked;
 	cout << "What is your hourly rate of pay? ";
@@ -28,6 +30,7 @@ int main()
 
 Arithmetic expressions
 *, /, +, -, (), %
+multiplication has higher precidence than <<
 
 Divison
 - 14.3/5.0 ==> 2.86
@@ -41,8 +44,126 @@ double x = 3.1 + 14/5; //x = 5.1, not 5.9
 [\c++]]
 
 
+-----------------------------------------------------------
+    10/11/2017
+-----------------------------------------------------------
+Goal: 
+	What is your name? Sir Robin
+	How old are you? 32
+	What is your quest? To seek the Holy Grail
+	Hello, brave Sir Robin!
+	You want To seek the Holy Grail 
+	If you live, next year you will be 33
+
+cin
+	-reads line up to whitespace
+
+getline
+	-reads a line of text up to a newline character 
+	-strips newline character
+	-cin, if it reads in a number, won't recognize the \n and will keep it in the stream. getline will read up to that new line ie read nothing
+	-problem if cin >> number and then use getline immediatly afterwords
+	-optional 3rd argument for reading up to a character other than \n
+
+										| Step | OS writes | OS holds | Available to program |
+										| 1)   | x         | x        |                      |
+										| 2)   | y         | xy       |                      |
+										| 3)   | bs sp bs  | x        |                      |
+										| 4)   | z         | xz       |                      |
+										| 5)   | cr lf     |          | x z newline          |
+										|      |           |          | (empty)              |
+Program does getline(cin, s);
+1) You type x
+2) You type y	
+3) You type backspace
+4) You type z
+5) You type Enter
+ 										| Step | OS writes | OS holds | Available to program |
+ 										| 1)   | 3         | 3        |                      |
+ 										| 2)   | 2         | 2        |                      |
+ 										| 3)   | cr lf     | x        | 3 2 newline          |
+ 										|      |           |          | newline              |
+Program does cin >> i
+1) You type 3
+2) You type 2
+3) You type Enter
+   
+
+Strings
+	defaults to empty ie "" because of the string constructor
+
+cin.ignore(int, char)
+	throwaway the number (first parameter) of characters or until you come across the specified character (second parameter)
+
+[c++]
+#include <iostream>
+#include <string> //header file for using type string 
+int main() {
+	cout << "What is your name?";
+	string personsName;
+	getline(cin, personsName);	
+	cout << "How old are you? ";
+	int age;
+	cin >> age; 
+	cin.ignore(10000, '\n'); 
+
+	cout << "What is your quest? ";
+	string quest;
+	getline(cin, quest);
+
+	cout << "Hello, brave " << personsName << "!" << endl;
+	cout << "You want " << quest << endl;
+	cout << "If you live, next year you will be " << age + 1 << endl;
+}
+[\c++]
+
+
+If statements
+	-if(condition)
+		statements
+	 else
+	 	statements
+	-Equality comparisons
+		>, <, >=, <=, ==, !=
+
+
+---------------------TWIST TO LECTURE FROM 10/9/2017---------------------------------------------------
+-only withhold 10% of wage if somone makes at least $14 an hour
+-hold 5% of wage if someone makes less than $14 an hour
+
+[c++]
+#include <iostream>
+#include <string>
+using namespace std; //allows us to not use the prefix std::
+
+int main() 
+{
+	cout << "How many hours did you work? ";
+	double hoursWorked;
+	cin >> hoursWorked;
+	cout << "What is your hourly rate of pay? ";
+	double payRate;
+	cin >> payRate;
+	cout.setf(ios::fixed); //fixed point notation
+	cout.precision(2); //2 digits to the right of the decimal point (rounds if necessary)
+	double amountEarned = hoursWorked * payRate;
+	cout << "You earned $" << amountEarned << endl; 
+	double withholdingRate;
+	if(payRate >= 14.00) 
+		withholdingRate = 0.10; //be careful of where withholdingRate is declared...if it is declared in the if statement, it can only be used in this blockc
+	else 
+		withholdingRate = 0.05;
+	
+	cout << "$" << (withholdingRate * amountEarned) << " will be withheld." << endl;
+
+	if(payRate < 10.00)
+		cout << "Ask for a raise!" << endl;
+
+}	
+[\c++]]
 
 
 
 
+	
 
