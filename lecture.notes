@@ -8,6 +8,7 @@ Types
 	double:  10^-308 to 10^308. 15 or 16 significant digits
 	int: about -2 billion to 2 billion
 	identifiers: letter...zero or more letters, digits, or underscores
+-----------
 [c++]
 #include <iostream>
 using namespace std; //allows us to not use the prefix std::
@@ -23,21 +24,21 @@ int main()
 	cout.setf(ios::fixed); //fixed point notation
 	cout.precision(2); //2 digits to the right of the decimal point (rounds if necessary)
 	double amountEarned = hoursWorked * payRate;
-	cout << "You earned $" << amountEarned << endl; //multiplication has higher precidence than <<
+	cout << "You earned $" << amountEarned << endl; //multiplication has higher precedence than <<
 	cout << "$" << (0.10 * amountEarned) << " will be withheld." << endl;
 }	
 [\c++]]
-
+-----------
 Arithmetic expressions
 *, /, +, -, (), %
-multiplication has higher precidence than <<
+multiplication has higher precedence than <<
 
 Divison
 - 14.3/5.0 ==> 2.86
 - 14.3/5 ==> 2.86
 - 14/5.0 ==> 2.85
 - 14/5 ==> 2
-- 14%5 ==> 4 (precidence is the same as multiplication and divison)
+- 14%5 ==> 4 (precedence is the same as multiplication and divison)
 
 [c++]
 double x = 3.1 + 14/5; //x = 5.1, not 5.9 
@@ -95,6 +96,7 @@ Strings
 cin.ignore(int, char)
 	throwaway the number (first parameter) of characters or until you come across the specified character (second parameter)
 
+-----------
 [c++]
 #include <iostream>
 #include <string> //header file for using type string 
@@ -116,7 +118,7 @@ int main() {
 	cout << "If you live, next year you will be " << age + 1 << endl;
 }
 [\c++]
-
+------------
 
 If statements
 	-if(condition)
@@ -162,8 +164,251 @@ int main()
 }	
 [\c++]]
 
+-----------------------------------------------------------
+    10/16/17
+-----------------------------------------------------------
+-magic numbers are bad, use constants instead
 
+[c++]
+#include <iostream>
+#include <string>
+using namespace std; //allows us to not use the prefix std::
 
+const double PAYRATE_THRESHOLD = 14.00;
+const double HIGH_WITHHOLDING_RATE = 0.10;
+const double LOW_WITHHOLDING_RATE = 0.05;
 
+int main() 
+{
+	cout << "How many hours did you work? ";
+	double hoursWorked;
+	cin >> hoursWorked;
 	
+	cout << "What is your hourly rate of pay? ";
+	double payRate;
+	cin >> payRate;
+	
+	double amountEarned = hoursWorked * payRate;
+	
+	cout.setf(ios::fixed); //fixed point notation
+	cout.precision(2); //2 digits to the right of the decimal point (rounds if necessary)
+	cout << "You earned $" << amountEarned << endl; 
+	
+	double withholdingRate;
+	
+	if(payRate >= PAYRATE_THRESHOLD) //use constants instead
+		withholdingRate = HIGH_WITHHOLDING_RATE; //be careful of where withholdingRate is declared...if it is declared in the if statement, it can only be used in this blockc
+	else 
+		withholdingRate = LOW_WITHHOLDING_RATE;
+	
+	cout << "$" << (withholdingRate * amountEarned) << " will be withheld." << endl;
+
+	if(payRate < 10.00)
+		cout << "Ask for a raise!" << endl;
+
+}	
+[\c++]]
+
+-&& has higher precedence than ||
+-use parentheses to group the || together
+
+Inverting expressions
+-< becomes >=
+-> becomes <=
+-|| becomes &&
+
+---EXAMPLE---
+if (rating < 1 || rating > 10)
+			becomes
+if (rating >= 1 && rating <= 10)
+-------------
+
+De Morgan's Laws
+-not (A or B) ==> (not A) && (not B)
+-not (A && B) ==> (not A) || (not B)
+
+
+Switch Case statement
+-can't be string or double...int or char only
+-'or' equivalent is falling through...no break
+[c++]
+switch (choice)
+{
+	case 1:
+		...
+		break;
+	case 2:
+	case 4:
+		...
+		break;
+	case 3:
+	case 5:
+		...
+		break;
+	default:
+		cout << "Choice must be 1 through 5\n";
+		return 1;
+}
+[/c++]
+
+-----------------------------------------------------------
+    10/18/17
+-----------------------------------------------------------
+[c++]
+void greet(int nTimes, string msg); //function prototype
+
+int main() {
+	greet(3, "hello");
+	greet(5, "Ni hao");
+
+	int x;
+	cin >> x;
+	cin.ignore(10000, '\n');
+	string t;
+	getline(cin, t);
+	greet(3 * x-7, t + "!!!");
+}
+
+void greet(int nTimes, string msg) {
+	for (int i = 1; i <= nTimes; ++i) {
+		cout << msg << endl;
+	}
+}
+[/c++]
+
+-when arguments are passed to functions, copies of the variables are created
+
+functions that return a value
+
+[c++]
+	int square(int k);
+
+	int main() {
+		int x = square(2);
+		greet(square(x) - 10, "Hello");
+	}
+
+	int square(int k) {
+		return k * k; 
+	}
+
+[/c++]
+
+main function
+-returns an int indicating whether or not the main routine has executed successfully
+-0 means the program executed successfully. Any other value means program failed. 
+
+Goal:
+Enter a phone number: (310) 825-4321
+The digits in the number are 3108254321
+
+cctype is a c library so the "boolean" expression the functions return are actually ints
+	-character classification functions eg isdigit(), islower()...
+In c++, the true value is converted to 1
+[c++]
+#include <iostream>
+#include <string>
+#include <cctype> 
+
+using namespace std;
+
+bool isValidPhoneNumber(string number);
+string digitsOf(string number);
+
+int main() {
+	cout << "Enter a phone number: ";
+	string phoneNumber;
+	getline(cin, phone);
+	if(isValidPhoneNumber(phoneNumber)) {
+		cout << "The digits in the number are " << digitsOf(phoneNumber) << endl;
+	}
+	else {
+		cout << "A phone number must have 10 digits\n";
+	}
+
+}
+
+bool isValidPhoneNumber(string number) {
+	int nDigits = 0;
+	for(int i = 0; i != number.length(); ++i) {
+		if(isdigit(number[i])) 
+			nDigits++;
+	}
+	return (nDigits == 10);
+}
+
+string digitsOf(string number) {
+	string digitsOnly = "";
+	for(int i = 0; i != number.size(); ++i) {
+		if(isdigit(number[i])) 
+			digitsOnly += number[i];
+	}
+	return digitsOnly;
+}
+[/c++]
+
+Pass by reference
+-suppose we wanted to convert polar coordinates to cartesian coordinates. How do we return 2 values (x and y)? Pass x and y in as references
+-if we don't use references, original values of x and y will be unchanged!
+-a reference is another name for an already existing object...so whatever you do to a reference will be done to the original values
+
+[c++]
+#include <cmath>
+using namespace std;
+
+void polarToCartesian(double rho, double theta, double x, double y);
+
+int main() {
+	double r, angle;
+	//...get values fir r and angle
+	double x, y;
+	polarToCartesian(r, angle x, y);
+
+	double y2; 
+	polarToCartesian(r, 2 * angle, x, y2); 
+}
+
+void polarToCartesian(double rho, double theta, double& x, double& y) { //use references of x and y...don't make copies 
+	x = rho * cos(theta);
+	y = rho * sin(theta);
+}
+[/c++]
+
+-in this example, rho and theta are "passed by value" ==> copied
+-x and y are "passed by reference" ==> no copy is made
+
+Suppose we we want to upper case all characters in a string...
+-two ways to solve this problem
+-return new string or modifiy old string
+
+[c++]
+string upperCaseVersion(string message) {
+	string result = "";
+	for(int i = 0; i != message.size(); ++i) {
+		result += toupper(message[i]);
+	}
+	return result;
+}
+
+int main() {
+	string msg;
+	getline(cin, msg);
+	cout << upperCaseVersion(msg) << endl;
+}
+
+void makeUpperCase(string& message) {
+	for(int i = 0; i != message.size(); ++i) {
+		message[i] = toupper(message[i]);
+	}
+}
+int main() {
+	string msg;
+	getline(cin, msg);
+	makeUpperCase(msg); 
+	cout << msg << endl;
+}
+[/c++]
+
+
+
 
