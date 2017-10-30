@@ -1,0 +1,109 @@
+|  Type  |      Values      |
+|--------|------------------|
+| int    | -2^31 to 2^31    |
+| double | 15 sig figs      |
+| float  | 6-7 sig figs     |
+| bool   | true/false (1/0) |
+
+Arithmetic Operations
++, -, *, /, %
+-Ex: Divide 5280 and 199 and have result be decimal
+-Can use 5280., 199., and result will have decimals  
+-If at least one of the operands is a double float point division occurs
+
+i++ vs ++i
+[c++]
+int n = 2;
+int m = 2;
+int result1 = 2 * (n++); //result1 is 4
+int result2 = 2 * (++m); //result2 is 6
+cout << n << m << endl; //n and m are 3
+
+int i = 2;
+cout << i + (++i); //this evaluation could be 6 or 5...
+[/c++]
+
+Reading Input
+-Use cin for int, double, char
+-Use getline for string...consumes characters from the input until it encounters a newline character. getline extracts and discards newline character
+-When asking for string input after using cin, make sure to use cin.ignore(10000, '\n') (ignore 10000 characters or until you hit newline character)
+
+[c++]
+int age; cin >> age;
+cin.ignore(10000, '\n')
+string name; getline(cin, name);
+[/c++]
+
+switch statements
+-cases of a switch statement have the same scope
+-note: if you initialize a variable inside one of the cases and don't use it in the default statement, compiler will say "skipped initialization of variable". To avoid this, put braces 
+ around the cases
+
+[c++]
+int n; cin >> n;
+switch (n) {
+	case 1: {
+		int x = 10;
+		cout << "1 times ten is " << x << endl;
+		break;
+	}
+	default:
+		cout << "You didn't enter a valid value...goodbye\n";
+		break;
+}
+[/c++]
+
+Loops
+-for, while, do while
+-check for condition before starting do while loop...ie if input value is valid (non-negative, non-null, etc)
+-break terminates entire loop, continue skips to next iteration. Break only breaks out of one loop; to break out of 
+ multiple loops, use a bool as a flag
+
+[c++]
+"following snippets of code do the same thing"
+int i = 0;
+while(i < 5) {
+	cout << "Hello!\n";
+	i++;
+}
+
+int i = 0;
+do {
+	cout << "Hello!\n";
+	i++;
+} while(i < 5);
+
+for(int i = 0; i < 5; i++) {
+	cout << "Hello!\n";
+}
+[/c++]
+
+Nested Loops 
+-Total number of iterations equals number of iterations of inner loop times number of iterations of outer loop
+[c++]
+"Prints a stack of money leaning against a wall"
+for(int i = 0; i < n; ++i) {
+	for(int j = i; j < n - 1; ++j) {
+		cout << " ";
+	}
+	for(int j = n; j >= n - i; --j) {
+		cout << "$"; 
+	}
+	cout << "|\n";
+}
+[/c++]
+
+strings:
+size() method returns the number of characters in a string
+substr(startIndex, length) returns a substring including startIndex of given length
+
+[c++]
+"Get my first name"
+string word = "Howard Wang";
+string substring = word.substr(0, 6); 
+[/c++]
+
+cctype
+-Useful shortcuts for characters...isalpha, isupper, islower, isdigit
+
+

@@ -1,0 +1,181 @@
+-----------------------------------------------------------
+    10/18/17
+-----------------------------------------------------------
+[c++]
+void greet(int nTimes, string msg); //function prototype
+
+int main() {
+	greet(3, "hello");
+	greet(5, "Ni hao");
+
+	int x;
+	cin >> x;
+	cin.ignore(10000, '\n');
+	string t;
+	getline(cin, t);
+	greet(3 * x-7, t + "!!!");
+}
+
+void greet(int nTimes, string msg) {
+	for (int i = 1; i <= nTimes; ++i) {
+		cout << msg << endl;
+	}
+}
+[/c++]
+
+-when arguments are passed to functions, copies of the variables are created
+
+functions that return a value
+
+[c++]
+	int square(int k);
+
+	int main() {
+		int x = square(2);
+		greet(square(x) - 10, "Hello");
+	}
+
+	int square(int k) {
+		return k * k; 
+	}
+
+[/c++]
+
+main function
+-returns an int indicating whether or not the main routine has executed successfully
+-0 means the program executed successfully. Any other value means program failed. 
+
+Goal:
+Enter a phone number: (310) 825-4321
+The digits in the number are 3108254321
+
+cctype is a c library so the "boolean" expression the functions return are actually ints
+	-character classification functions eg isdigit(), islower()...
+In c++, the true value is converted to 1
+[c++]
+#include <iostream>
+#include <string>
+#include <cctype> 
+
+using namespace std;
+
+bool isValidPhoneNumber(string number);
+string digitsOf(string number);
+
+int main() {
+	cout << "Enter a phone number: ";
+	string phoneNumber;
+	getline(cin, phone);
+	if(isValidPhoneNumber(phoneNumber)) {
+		cout << "The digits in the number are " << digitsOf(phoneNumber) << endl;
+	}
+	else {
+		cout << "A phone number must have 10 digits\n";
+	}
+
+}
+
+bool isValidPhoneNumber(string number) {
+	int nDigits = 0;
+	for(int i = 0; i != number.length(); ++i) {
+		if(isdigit(number[i])) 
+			nDigits++;
+	}
+	return (nDigits == 10);
+}
+
+string digitsOf(string number) {
+	string digitsOnly = "";
+	for(int i = 0; i != number.size(); ++i) {
+		if(isdigit(number[i])) 
+			digitsOnly += number[i];
+	}
+	return digitsOnly;
+}
+[/c++]
+
+Pass by reference
+-suppose we wanted to convert polar coordinates to cartesian coordinates. How do we return 2 values (x and y)? Pass x and y in as references
+-if we don't use references, original values of x and y will be unchanged!
+-a reference is another name for an already existing object...so whatever you do to a reference will be done to the original values
+
+[c++]
+#include <cmath>
+using namespace std;
+
+void polarToCartesian(double rho, double theta, double x, double y);
+
+int main() {
+	double r, angle;
+	//...get values fir r and angle
+	double x, y;
+	polarToCartesian(r, angle x, y);
+
+	double y2; 
+	polarToCartesian(r, 2 * angle, x, y2); 
+}
+
+void polarToCartesian(double rho, double theta, double& x, double& y) { //use references of x and y...don't make copies 
+	x = rho * cos(theta);
+	y = rho * sin(theta);
+}
+[/c++]
+
+-in this example, rho and theta are "passed by value" ==> copied
+-x and y are "passed by reference" ==> no copy is made
+
+Suppose we we want to upper case all characters in a string...
+-two ways to solve this problem
+-return new string or modifiy old string
+
+[c++]
+string upperCaseVersion(string message) {
+	string result = "";
+	for(int i = 0; i != message.size(); ++i) {
+		result += toupper(message[i]);
+	}
+	return result;
+}
+
+int main() {
+	string msg;
+	getline(cin, msg);
+	cout << upperCaseVersion(msg) << endl;
+}
+
+void makeUpperCase(string& message) {
+	for(int i = 0; i != message.size(); ++i) {
+		message[i] = toupper(message[i]);
+	}
+}
+int main() {
+	string msg;
+	getline(cin, msg);
+	makeUpperCase(msg); 
+	cout << msg << endl;
+}
+[/c++]
+-----------------------------------------------------------
+    10/25/2017
+-----------------------------------------------------------
+bool functions in loops
+[c++]
+string phone;
+for(;;) { 
+	cout << "Enter a phone number\n";
+	getline(cin, phone);
+	if(isValidPhoneNumber(phone))
+		break;
+	cout << "A phone number must have 10 digits; try again\n";
+}
+cout << "The digints in the number are" << digitsOf(phone) << endl;
+[/c++]
+-"N-and-a-half-times-loop": the loop doesn't fully execute n number of times
+-This way of writing loops avoids repitition in ccalling the function
+-continue: abandon the rest of the current iteration of the nearest enclosing loop. Useful for structuring deeply nested if statements
+
+Char vs int
+-a char can be assigned an int value...eg 76 = 'L'
+-in ASCII, 'a' through 'z' are in order and are contiguous
+-'A' through 'Z' are in order and are contiguous
+-'0' through '9' are in order and are contiguous

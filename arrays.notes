@@ -1,0 +1,112 @@
+-----------------------------------------------------------
+    10/25/2017
+-----------------------------------------------------------
+-arrays: store a list of values of the same type
+-for now, size of array needs to be betermined at compile time
+[c++]
+bool isValidDate(int year, int month, int day) {
+	int daysInMonth[12] = {
+		31, 28, 31, 30, 31, 30,
+		31, 31, 30, 31, 30, 31
+	};
+	if(month < 1 || month > 12 || day < 1) 
+		return false;
+
+	if(month != 2) 
+		return day <= daysInMonth[month - 1];;
+}
+[/c++]
+
+-----------------------------------------------------------
+    10/30/2017  
+-----------------------------------------------------------
+-take position of start of array and add the bytes (index 2 = 8 bytes from index 0 if ints are 4 bytes)
+-most compilers will give you a random piece of memory if you access an index out of bounds
+	this is dangerous because if you store values there, you can overwrite what the old memory location was being used for (eg value of another variable)
+-use const with the array if you don't want the elements of the array to change
+
+[c++]
+"suppose we wanted to print out the month number and the months with 31 days"
+bool isValidDate(int year, int month, int day) {
+	const int daysInMonth[12] = {
+		31, 28, 31, 30, 31, 30,
+		31, 31, 30, 31, 30, 31
+	};
+
+	if(month < 1 || month > 12 || day < 1) {
+		return false;
+	} 
+
+	if(month != 2) 
+		return day <= daysInMonth[month - 1];
+
+	const int N_MONTHS = 12;
+	const string monthName[N_MONTHS] = {
+		"January", "February"...
+		"December"
+	};
+
+	if(month < 1 || month > N_MONTHS)
+		cout << "Bad month number " << m << "!\n";
+	else 
+		cout << monthName[month - 1];
+
+	cout << "These months have 31 days:\n";
+	for(int i = 0; i < N_MONTHS; ++i) {
+		if(daysInMonth[i] == 31) 
+			cout << monthName[i]; "Data structure design matches the month to the number of days it corresponds to"
+	}
+
+}
+[/c++]
+
+-type casting
+-calcuate the average of the scores 
+[c++]
+int nScores = 0;
+int total = 0;
+cout << "Enter the scores: (nagative to quit)\n";
+for(;;) {
+	int score;
+	cin >> score;
+	if(score < 0)
+		break;
+	total += score;
+	nScores++;
+} 
+if(nScores  == 0)
+	cout << "There were no scores, so no mean\n";
+else
+	cout << "The mean of all scores is " << static_cast<double>(total)/nScores << endl; //cast total to double for floating point division
+[/c++]
+
+-now suppose we wanted to calculate the standard deviation of the scores as well
+-use an array!
+	-create an array that's big enough to store the number of scores
+
+[c++]
+const int MAX_NUMBER_OF_SCORES = 1000;
+int scores[MAX_NUMBER_OF_SCORES];
+int nScores = 0;
+int total = 0;
+cout << "Enter the scores: (nagative to quit)\n";
+for(;;) {
+	int score;
+	cin >> score;
+	if(score < 0)
+		break;
+	scores[nScores] = score;
+	total += score;
+	nScores++;
+} 
+if(nScores  == 0)
+	cout << "There were no scores, so no mean\n";
+else
+	cout << "The mean of all scores is " << static_cast<double>(total)/nScores << endl; //cast total to double for floating point division
+	double sumOfSquares = 0;
+	for(int i = 0; i < nScores; ++i) {
+		double diff = scores[k] - mean;
+		sumOfSquares += diff * diff;
+	}
+	cout << "The std. devation is " << sqrt(sumOfSquares / nScores) << endl;
+[/c++]
