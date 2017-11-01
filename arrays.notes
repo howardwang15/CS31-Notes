@@ -110,3 +110,68 @@ else
 	}
 	cout << "The std. devation is " << sqrt(sumOfSquares / nScores) << endl;
 [/c++]
+
+-----------------------------------------------------------
+    11/1/17
+-----------------------------------------------------------
+Passing arrays as parameters
+-Use const if the function isn't going to modify the array
+-It's ok for a function that modifies an array to call a function that takes in a const array
+-It's not ok for a function that takes a const array and pass it to a function that could modify it (won't compile)
+-for instance, setAll can call computeMean but computeMean can't call setAll
+	-fast memory vs slow memory (compiler optimization)
+[c++]
+"This program sets the first n elements of the array to value"
+void setAll(int arr[], int n, int value) {
+	for(int i = 0; i < n; ++i) {
+		arr[i] = value;
+	}
+}
+[/c++]
+
+Suppose we wanted to keep track of the attendance over a period of 5 weeks...how to organize the data?
+-single array with 35 elements (messy)
+-2d array (5 * 7), better
+	-access element with row, column
+[c++]
+"Get the total attendance for each week"
+const int NWEEKS = 5;
+const int NDAYS = 7;
+int attendance[NWEEKS][NDAYS];
+
+for(int i = 0; i < NWEEKS; ++i) {
+	int total = 0;
+	for(int j = 0; j < NDAYS; ++j) {
+		total += attendance[i][j]
+	}
+	cout << "The total for week " << i << " is " << total >> endl; 
+}	
+
+"Get the total attendance for the weekends of the month...and the total attendance for each day of the weekend"
+"Let 0 represent Monday and 6 represent Sunday because it is convenient"
+const string dayNames[NDAYS] =  {
+	"Monday", "Tuesday", "Wednesday", "Thursday"
+	"Friday", "Saturday", "Sunday"
+};
+
+int grandTotal = 0;
+for(int i = 4; i < NDAYS; ++i) {
+	int total = 0;
+	for(int j = 0; j < ; ++j) {
+		total += attendance[i][j]
+	}
+	cout << "The total for " << dayNames[i] << " is " << total << endl;
+	grandTotal += total;
+}
+cout << "Over the course of " << NWEEKS << " weeks, weekend attendance was " << grandTotal << endl;
+[/c++]
+
+Now suppose we have 16 monitors that track the attendance over a period of 5 weeks
+And business is booming so we open up more theatres
+[c++]
+int attendance[16][5][7]; "3d array for 16 monitors"
+int attendance[100][16][5][7]; "100 locations, all with 16 monitors"
+[/c++]
+
+
+
