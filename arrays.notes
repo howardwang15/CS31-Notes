@@ -2,7 +2,7 @@
     10/25/2017
 -----------------------------------------------------------
 -arrays: store a list of values of the same type
--for now, size of array needs to be betermined at compile time
+-for now, size of array needs to be determined at compile time
 [c++]
 bool isValidDate(int year, int month, int day) {
 	int daysInMonth[12] = {
@@ -172,6 +172,42 @@ And business is booming so we open up more theatres
 int attendance[16][5][7]; "3d array for 16 monitors"
 int attendance[100][16][5][7]; "100 locations, all with 16 monitors"
 [/c++]
+
+Back to Strings
+-string comparisons
+	-not length comparison
+	-character by character comparison
+		-let t = hello and s = help
+			-t < s since l < p at position 4
+		-let t = hello and s = hello!!!
+			-t < s since t ends before s does
+
+C Strings
+-array of characters
+-'\0' represents the end of a c string (zero byte)
+-have to declare the size of the array
+-loop through the array until you reach the zero byte to get the length, or use the cstring library
+[c++]
+#include <cstring>
+
+char s[100] = "";
+char t[9] = { 'H', 'e', 'l', 'l', 'o', '\0' }; "this is tedious"
+char t[9] = "Hello"; "zero byte is implied"
+
+cout << strlen(t); "returns the number of characters up to but not including \0"
+cin.getline(s, 100); "read a line into s the maximum number of characters"
+
+strcpy(s, t); "destination, source. Copies one array to another (t to s)"	
+
+char x[5] = "hello"; "this will not compile...needs size of 6 bc of \0"
+char y[3] = { 'A', 'B', 'C' }; "this is valid...however do not use as a c string"
+strlen(y); "however this will result in undefined behavior since there is no \0"
+strcpy(y, t); "undefined behavior since y is not large enough to store all the characters in t"
+[/c++]
+
+
+
+WILL BE ASKED ABOUT THE SIZE OF AN ARRAY
 
 
 
