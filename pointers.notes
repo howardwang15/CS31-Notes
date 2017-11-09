@@ -1,0 +1,96 @@
+-----------------------------------------------------------
+    11/8/2017
+-----------------------------------------------------------
+
+Pointers
+-another way to implement passing by reference
+-traverse arrays
+-manipulate dynamic storage
+-represent relationships in data structures
+
+-double& means reference-to-double or another name for some double
+-double* means pointer to double or address of some double
+-&x means "generate a pointer to x" or "address of x"
+-*x means "the object that x points to" or "follow the pointer x" 
+-why are there references if pointers do the same thing?
+	-overloading operators eg string concatenation...
+	 += is actually a void function so instead of writing &s += t, he could just pass s as a reference
+
+
+back to polar->cartesian
+
+[c++]
+void polarToCartesian(double rho, double theta, double* x, double* y) {
+	*x = rho * cos(theta);
+	*y = rho * sin(theta);
+}
+
+int main() {
+	double r;
+	double angle;
+	double x;
+	double y;
+	polarToCartesian(r, angle, &x, &y);
+}
+[/c++]
+
+practice!
+
+[c++]
+double a = 3.2; "valid"
+double b = 5.1; "valid"
+
+double* p = &a; "initalize p to point to a"
+double* q = 7.6; "invalid! Types are incompatible"
+
+double c = a; "valid"
+double d = p; "won't compile! Types are incompatible"
+
+double d = *p; "object that p points to"
+double& dd = d; "a reference to d. dd and d are talking about the same thing...if d changes, dd changes as well. Very weird"
+
+p = b; "won't compile"
+*p = b; "assign a double to a double. a is now b"
+p = &b; "assign a pointer to a pointer. p now points to b"
+
+p = &b;
+*p += 4; "b is now 9.1"
+
+int k = 3;
+int* z = &k; 
+
+p = &k; "won't compile because they are different types"
+
+cout << (k * b); "outputs 27.3"
+cout << (k * p); "incompatible types"
+cout << (k * *p); "outputs 27.3"
+cout << (*z * *p); "writes 27.3"
+
+double* q;
+*q = 4; "undefined bx, q is uninitialzed"
+
+q = a; "q points to b now"
+double* r = &a; "points to a"
+*r = b; "a is now 9.1"
+
+if(p == r) "will comile but this will be false...comparing two different addresses"
+if(p == q) "will be true...contain the same address"
+if(*p == *r) "true, comparing 2 doubles"
+
+if(p == z) "won't compile, pointers of different types"
+
+"DRAW PICTURES"
+
+[/c++]
+
+traversing arrays
+[c++]
+const int MAX_SIZE = 5;
+double da[MAX_SIZE];
+int k;
+double* dp;
+
+for(dp = &da[0]; dp != ) 
+	*dp = 3.6;
+
+[/c++]
