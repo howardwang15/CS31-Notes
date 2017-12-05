@@ -158,7 +158,7 @@ int grandTotal = 0;
 for(int i = 4; i < NDAYS; ++i) {
 	int total = 0;
 	for(int j = 0; j < ; ++j) {
-		total += attendance[i][j]
+		total += attendance[i][j];
 	}
 	cout << "The total for " << dayNames[i] << " is " << total << endl;
 	grandTotal += total;

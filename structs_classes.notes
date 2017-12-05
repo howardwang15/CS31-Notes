@@ -1,0 +1,284 @@
+
+-----------------------------------------------------------
+    11/15/17
+-----------------------------------------------------------
+Structs
+-allow for a good way to organize realted information
+-variables inside structs are called
+	-fields
+	-instance variables (Java)
+	-attributes
+	-data members
+-how to access members and assign values to them
+ object of some struct type . the name of a member of that type
+ a pointer to an object of some struct type -> the name of a member of that type
+ e->age is equivalent to (*e).age
+-you can do anything to the members you can do to regular variables
+[c++]
+struct Employee
+{
+	string name; 
+	double salary;
+	int age;
+}; <======Do not forget the semicolon
+
+int main () {
+	Employee e1;
+	Employee e2;
+
+	e1.name = "Fred";
+	e1.salary = 50000;
+	e1.age = 60;
+
+	e1.age++; "happy birthday fred"
+	cout << "Enter a name: ";
+	getline(cin, e2.name); "e2.name now has a user entered input"
+	cout << "Enter a salary: ";
+	cin >> e2.salary;
+}
+[/c++]
+we can also make an array of type Employee
+
+[c++] 
+Employee company[100]
+company[2].name = "Ricky"; 
+
+for (int i = 0; i != company[2].name.size(); ++i) 
+	cout << company[2].name[i] << endl; "prints Ricky vertically"
+
+
+[/c++]
+
+Passing an object of a struct into a function
+	-passing by value could be expensive since structs could be huge
+	-passing by const reference is cheaper 
+	-we can look at the objects but not change them
+[c++]
+void printPaycheck(const Employee& e) {
+	cout << "Pay to the order of " << e.name << " the amount of $" << e.salary/12 << endl;
+}
+
+void celebrateBirthday(Employee& ep) {
+	ep.age++;
+}
+
+void celebrateBirthday(Employee* ep) {
+	if(ep != nullptr)
+		ep->age++; ". operator has higher precidence than the star operator"
+}
+
+int main () {
+	Employee company[100];
+	int nEmployees = 0;
+	...read in some info, fill array, set nEmployees...
+	printPaycheck(company[2]);
+	celebrateBirthday(company + 1) 
+}[/c++]
+
+-----------------------------------------------------------
+    11/20/17
+-----------------------------------------------------------
+most of the time, we would want to use the reference version since it would be nonsense if the null pointer was passed to celebrateBirthday
+
+[c++]
+double totalPayroll(const Employee emps[], int n_emps) {
+	double total = 0;
+	for (int i = 0; i < n_emps; ++i) 
+		total += emps[i].salary;
+	return total;
+}
+
+int main() {
+	Employee company[100];
+	int nEmployees = 0;
+	......
+	cout << totalPayroll(company, nEmployees);
+}
+[/c++]
+
+Let's make some game
+-think of constraints when defining the data members of a struct
+[c++]
+struct Target {
+	"constraints:"
+		"history consists only of R's and L's"
+		"position = number of R's in history minus number of L's in history"
+	int pos;
+	string history;
+};
+
+int main() {
+	Target t;
+	t.pos++;
+	t.history += 'R';
+}
+[/c++]
+The above, however, allows the user to access the data members directly...for instance, a user could say t.pos += 17 which is 
+clearly not allowed
+
+member functions
+-when a member function is called, a pointer to the object is passed to it so it knows what object to operate on
+-the name of the pointer is represented by the keyword "this" ***********IMPORTANT***********
+[c++]
+struct Target {
+	public:
+		void init();
+		bool move(char dir);
+		void replayHistory();
+	private:
+		int pos;
+		string history;
+};
+
+void Target::init() {
+	this->pos = 0;
+	this->history = "";
+}
+
+bool Target::move(char dir) {
+	switch (dir) {
+		case 'R':
+		case 'r':
+			this->pos++;
+			break;
+		case 'L':
+		case 'l':
+			this->pos--;
+			break;
+		default:
+			return false;
+	}
+	this->history += toupper(dir);
+	return true;
+}
+
+void Target::replayHistory() {
+	for (int i = 0; i < this->history.size(); ++i) 
+		cout << this->history[i] << endl;
+}
+int main() {
+	Target t;
+	t.init();
+	t.move('R');
+	t.move('R');
+	t.move('L');
+	
+	Target t2;
+	t2.init();
+	t2.move('L');
+	t2.replayHistory();
+	...
+	t2.history = "Wow!"; "this won't compile since history is private to the struct"
+}
+[/c++]
+
+
+-----------------------------------------------------------
+    11/22/17
+-----------------------------------------------------------
+-rewrite the struct as a class
+-regular functions outside the class can't access the private member variables of the class
+-"this" isn't really necessary since we know which object of the class to call the function on (as long as there's no local variable with the same name)
+-compilers don't look into member functions to check if the object is modified
+-we put the const keyword after the function prototype in the class to tell the compiler that we won't modify the object (const member function)
+	-a member function that does not modify the object that it's called onn
+	-allows us to pass objects by const reference
+-constructors are automatically called whenever an object is created. They set the initial and valid state of member variables. Every element of the array wil have the constructor called on them
+
+
+[c++]
+class Target {
+	public:
+		Target();
+		bool move(char dir);
+		int position() const;
+		void replayHistory() const;
+	private:
+		int pos;
+		string history;
+};
+
+"initializes a target object to have posiiton 0 and no history"
+Target::Target() {
+	pos = 0;
+	string = "";
+}
+
+bool Target::move(char dir) {
+	switch (dir) {
+		case 'R':
+		case 'r':
+			pos++;
+			break;
+		case 'L':
+		case 'l':
+			pos--;
+			break;
+		default:
+			return false;
+	}
+	history += toupper(dir);
+	return true;
+}
+
+int Target::position() const{
+	return pos;
+}
+
+void Target::replayHistory() const{
+	for (int i = 0; i < history.size(); ++i) 
+		cout << history[i] << endl;
+}
+
+"can't access the private members"
+void repeatMove(Target& t, int nTimes, char dir) {
+	for (int i = 0; i < nTimes; ++i) 
+		t.move(dir);
+}
+
+void report(const Target& t) {
+	cout << "There is a target at " << t.position() << endl;
+}
+
+int main() {
+	Target t;
+	t.init();
+	t.move('R');
+	t.move('R');
+	t.move('L');
+	t2.replayHistory();
+	...
+	t2.history = "Wow!"; "this won't compile since history is private to the struct"
+	Target ta[3]; "constructor gets called to every object of the array"
+	ta[0].move('L');
+	ta[1].move('R');
+}	
+[/c++]
+
+-can have more than one constructor for a class as long as the arguments list is different
+[c++]
+class Pet {
+	public:
+		Pet(int initialHealth, string nm);
+		string name() const;
+	private:
+		int m_health;
+		string m_name;
+};
+
+Pet::Pet(int initialHealth, string nm) {
+	m_health = initialHealth;
+	m_name = nm;
+}
+
+string Pet::name() const{
+	return m_name;
+}
+
+int main () {
+	Pet x(10, "Fido");
+	cout << x.name();
+}
+[/c++]
+
+

@@ -83,14 +83,96 @@ if(p == z) "won't compile, pointers of different types"
 
 [/c++]
 
-traversing arrays
+-----------------------------------------------------------
+    11/13/2017
+-----------------------------------------------------------
+*&x = x no matter what x is
+&*p = p only works for pointers
+traversing arrays with pointers
+
+algebra
+-&a[i] + j ==> &a[i+j]
+-suppose element 0 starts at address 1000...then the pointer + 1 is NOT address 1001 since the 1 means add one to the position...must convert to bytes
+ Therefore pointer + 1 = 1008 (if we're talking about doubles)
+-points to element j spots down the array
+-undefined behavior if pointer points to something negative at the end
+-generating a pointer one past the last element of the array IS ALLOWED
+	-can't deference that pointer though
+-comparing pointers
+	-&a[i] < &a[j] which is i < j or if the element the first points to comes earlier than the element the second points to
+-pointers to primitive types
+	-only pointer arithmetic is adding or subtracting 0 since a primitive type is just 1 element
+using an array all by itself is equivalent to the pointer of element 0
+a = &a[0]
+-dp = 3.6 or *&da[0] = 3.6 so da[0] = 3.6;
+
 [c++]
 const int MAX_SIZE = 5;
 double da[MAX_SIZE];
 int k;
 double* dp;
-
-for(dp = &da[0]; dp != ) 
+  
+for(dp = &da[0]; dp < &da[MAX_SIZE]; ++dp) "loops until it reaches the final index + 1 of the array"
 	*dp = 3.6;
 
+//array is the same as pointer to first element so we can also write the loop as follows
+for(dp = da; dp < da + MAX_SIZE; ++dp)
+	*dp = 3.6;
+[/c++]
+
+As a parameter to a function
+int array and int* mean the same thing
+
+subscripting with a pointer
+-if p is a pointer, then p[i] = *(p + i)
+
+
+[c++]
+int lookup(const string a[], int n, string value) {
+	...a[k]...
+}
+is equivalent to...
+
+int lookup(const string* a, int n, string value) {
+
+}
+
+string b[10] = { 
+	"rat", "pig", "goat", "rat", "pig",
+	"rat", "rat", "zebra", "pig", "rat"
+};
+
+int m = lookup(b, 10, "zebra"); 7
+is equivalent to...
+int m = lookup(&b[0], 10, "zebra"); 7
+
+int h = lookup(&b[4], 5, "zebra"); 3
+is equivalent to...
+int h = lookup(b + 4, 5, "zebra"); 3
+
+int h = 4 + lookup(b + 4, 5, "zebra"); "converts" 3 to the b system, 7
+[/c++]
+
+[c++]
+"return the first position of the negative number in the array and -1 if none exists"
+int findFirstNegative(double d\a[], int n) {
+	for (double* dp = a; dp < a + n; ++dp) {
+		if (*dp < 0)
+			return k;
+	}
+	return -1;
+}
+
+int main () {
+	double da[5];
+	...
+	int fnpos = findFirstNegative(da, 5);
+	if (fnpos == -1) 
+		cout << "There are no negative values in the array\n";
+	else {
+		cout << "The first negative value is " << da[fnpos] << endl;
+		cout << "It's at element number " << fnpos << endl; 
+	}
+
+}
 [/c++]
