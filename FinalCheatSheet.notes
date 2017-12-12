@@ -1,0 +1,126 @@
+Reading Input
+-Use cin for int, double, char
+-Use getline for string...consumes characters from the input until it encounters a newline character. getline extracts and discards newline character
+-When asking for string input after using cin, make sure to use cin.ignore(10000, '\n') (ignore 10000 characters or until you hit newline character)
+
+[c++]
+int age; cin >> age;
+cin.ignore(10000, '\n')
+string name; getline(cin, name);
+[/c++]
+
+functions
+-parameters 
+	-passed by value by default (primitive types and strings)
+	-passing by reference: makes references to the original variables and modifies them in the functions
+		-"return" more than one value
+	-const modifier (pass by reference) saves memory 
+		-can't modify the values...compile error
+	-functions can be overloaded...ie have same name but take different parameters
+		however, if arguments passed are ambiguous eg could be int or double, compile time error will occur
+		eg add(int, int), add(double, double) and in main suppose we called add(int, double) 
+
+arrays
+-int name[5] = { 1, 2, 3, 4, 5}; int name[10] = { 0 }; assigns all elements to 0
+-size of the array must be know at compile time...eg this won't compile int array[];
+	-size should be a constant...do not use a variable. Don't do cin >> x; int array[x];
+	 int size = 5; int array[size]; //will not compile
+	 const int SIZE = 5; int array[SIZE]; //will compile
+-if using list initializer, then size of array is just the #of elements of the array
+ int array[] = { 1, 2, 3 }; here size is 3 (equal sign not necessary)
+-if #of elements is less than the size specified, then the rest of the elements = 0 
+-passing arrays into functions
+	-don't specify the size in the brackets, specify it as the second parameter of the array;
+
+c strings
+-an array of characters...terminated by the null character '\0' which has ASCII value 0
+-number of elements of a c string is always #of alpha numeric characters + 1 for the null character
+-intitialization
+	char array[6] = { 'h', 'e', 'l', 'l', 'o', '\0' };  
+	cannot assign values to them later...eg array = "hello" wouldn't work nor would array = { 'h', 'e', 'l', 'l', 'o', '\0'}
+	although you can assign each element a value...eg array[0] = 'h'
+	char array[6] = "hello"; can't initalize with more than 5 characters bc of the null character
+	char array[] = "help"; size is implied to be 5 
+	char array[] = "abc" is NOT equivalent to char array[] = {'a', 'b', 'c'} (first has '\0')
+
+	REMEMBER TO MANUALLY ATTACH THE NULL CHARACTER IF YOU ARE BUILDING A CSTRING WITH A LOOP
+
+-functions
+	strlen(s1)
+		-returns length of cstring not including the null character
+	strcat(s1, s2)
+		-concatenates string s2 onto s1
+	strcpy(s1, s2)
+		-copies s2 to s
+		-undefined behavior if s1 is not big enough to store s2
+	strcmp(s1, s2)
+		-returns 0 if s1 and s2 are the same, negative number if s1 < s2, positive number if s1 > s2
+		 if (strcmp(s1, s2) == 0) cout << "s1 and s2 are the same"
+		 -DO NOT DO cstring1 == cstring2...doesn't work
+-input, output 
+	cin.getline(s, 100)
+		-read up to 99 characters 
+		-undefined behavior if more than 99 characters are stored and you try to use it as a cstring
+	cout << cstring << endl works with cstrings	
+multidimensional arrays
+-initaliziation
+	int a[2][5] means there are 2 rows and 5 columns
+	a = {
+		{1, 2, 3, 4, 5},
+		{6, 7, 8, 9, 10}
+	};
+iterating through a 2d array
+const int WEEKS = 5, DAYS = 7;
+int attendence[WEEKS][DAYS];
+...initalize attendence
+for (int i = 0; i < WEEKS; ++i) {
+	int total = 0;
+	for (int i = 0; i < DAYS; ++i) {
+		total += attendence[i][j];
+	}
+	cout << "the total for week " << i << " is " << total << endl;
+}
+notice in this example the number of days increments faster than the number of weeks
+
+for (int i = 0; i < DAYS; ++i) {
+	int total = 0;
+	for (int j = 0; j < WEEKS; ++j) {
+		total += attendence[i][j];
+	}
+	cout << "the total for day " << i << " is " << total << endl;
+}
+-passing 2d arrays to functions
+	specify 2nd dimension 
+	void print(int array[][MAXSIZE], const int DIM1)
+-array[i] is the ith row 
+
+Pointers
+-hold memory addresses of variables (initialized to garbage)
+-int* ptr = &a...ptr now points to a
+-dereferencing pointers refers to the value pointed by the pointer...supppose a = 5 then *ptr = 5 as well
+	-if the value pointed to by the pointer is changed, original variable holding that is changed as well
+-are also the first element of an array (array name by itself is a pointer to the first element)
+-nullptr is a special value...can be used to assign or compare pointer values
+-if they point to an array, they can be subscripted (cstring is also a char*)
+	eg int* ptr = arr + 3; ptr[1] would be element 5 in the array
+
+Classes and structs
+-good data structures for holding information (DON'T FORGET SEMICOLON!!)
+-private members can only be accessed in the class...eg can't use them in regular functions 
+-constructor is called when an object is created...sets the default/initial values of the member variables
+	-if you don't write a default constructor, compiler writes one for you...however if you write one, compiler one doesn't exist
+
+
+Dynamic storage
+-use new to generate a pointer to the type (for arrays specify size as well), used when we don't know the exact size of array
+	Pet* dog[8]; //creates 8 pointers to type Pet
+-use int variable to indicate how many objects we have used
+	dog[curNum] = new Pet; creates a new pet object and returns a pointer
+-make sure to delete...to delete array use brakets but to delete single element, don't use it
+	delete [] dog gets rid of the entire array, delete dog[curNum] deletes the curNum dog object...can delete a null pointer
+-be careful of dangling pointers...eg pointers that still exist but don't point to anything (after you use delete)
+-when getting rid of a pointer at the beginning of the array or in the middle, be sure to decrease the loop variable while shifting to make sure you don't skip any pointers
+
+
+
+
